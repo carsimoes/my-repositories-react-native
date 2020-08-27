@@ -20,17 +20,28 @@ export default function App() {
   useEffect(()=>{
     api.get('repositories').then(
         response =>{
-            console.log(response.data);
+            //console.log(response.data);
             setRepositories(response.data);   
         });
   },[]);
 
   async function handleLikeRepository(id) {
-    // Implement "Like Repository" functionality
-     const responseLike = await api.put('repositories/'+id+'/like');
-     //const likes = response.likes;
- 
-    //  I don't know how to refresh yet!
+    
+     const response = await api.post('repositories/'+id+'/like'); //no meu server está como put
+     const indexId = repositories.findIndex(item => item.id === id)
+    
+     const repositoriesAux = repositories.map(item => item)
+  
+   repositoriesAux[indexId].likes += 1;
+  //repositoriesAux.likes = response.likes;
+     setRepositories(repositoriesAux)
+      // setRepositories(repositories.map(repository => {
+      //   if (repository.id === id) {
+      //     return response.data;
+      //   } else {
+      //     return repository;
+      //   }
+      // }));
   }
  
   return (
@@ -45,7 +56,7 @@ export default function App() {
             <View style={styles.repositoryContainer}>
               <Text style={styles.repository}>{repository.title}</Text>
 
-                <FlatList
+                {/* <FlatList
                   style={styles.techsContainer}
                   data={repository.techs}
                   keyExtractor={rt => rt}
@@ -56,17 +67,26 @@ export default function App() {
                       </Text>      
                     </View>
                   )}>
-                </FlatList>
+                </FlatList> */}
         
+              <View style={styles.techsContainer}>
+                {repository.techs.map(tech=>(
+                   <Text key={tech} style={styles.tech}>
+                   {tech}
+                 </Text>   
+                ))}
+              </View>
+
               <View style={styles.likesContainer}>
                 <Text
                   style={styles.likeText}
                   testID={`repository-likes-${repository.id}`}
-                >
-                  {repository.likes} curtidas
+                > 
+                {repository.likes} curtidas
+                          
                 </Text>
               </View>
-            
+             
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => handleLikeRepository(repository.id)}
