@@ -29,36 +29,35 @@ export default function App() {
     // Implement "Like Repository" functionality
      const responseLike = await api.put('repositories/'+id+'/like');
      //const likes = response.likes;
-
-    //  const responseGet = await api.get('repositories');
-    //  setRepositories([...repositories, responseGet.data]); 
+ 
+    //  I don't know how to refresh yet!
   }
-
-
-
+ 
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor="#7159c1" />
       <SafeAreaView style={styles.container}>
 
         <FlatList  
- 
           data={repositories}
           keyExtractor={repository => repository.id}
           renderItem={({item:repository}) => (
             <View style={styles.repositoryContainer}>
               <Text style={styles.repository}>{repository.title}</Text>
 
-              {/* todo */}
-              <View style={styles.techsContainer}>
-                <Text style={styles.tech}>
-                  ReactJS
-                </Text>
-                <Text style={styles.tech}>
-                  Node.js
-                </Text>
-              </View>
-
+                <FlatList
+                  style={styles.techsContainer}
+                  data={repository.techs}
+                  keyExtractor={rt => rt}
+                  renderItem={({item:tech}) => (
+                    <View style={styles.techsContainer}>
+                      <Text style={styles.tech}>
+                        {tech}
+                      </Text>      
+                    </View>
+                  )}>
+                </FlatList>
+        
               <View style={styles.likesContainer}>
                 <Text
                   style={styles.likeText}
