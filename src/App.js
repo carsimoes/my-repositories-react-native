@@ -27,7 +27,14 @@ export default function App() {
 
   async function handleLikeRepository(id) {
     // Implement "Like Repository" functionality
+     const responseLike = await api.put('repositories/'+id+'/like');
+     //const likes = response.likes;
+
+    //  const responseGet = await api.get('repositories');
+    //  setRepositories([...repositories, responseGet.data]); 
   }
+
+
 
   return (
     <>
@@ -35,12 +42,14 @@ export default function App() {
       <SafeAreaView style={styles.container}>
 
         <FlatList  
+ 
           data={repositories}
           keyExtractor={repository => repository.id}
           renderItem={({item:repository}) => (
             <View style={styles.repositoryContainer}>
               <Text style={styles.repository}>{repository.title}</Text>
 
+              {/* todo */}
               <View style={styles.techsContainer}>
                 <Text style={styles.tech}>
                   ReactJS
