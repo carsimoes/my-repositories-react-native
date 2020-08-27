@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   SafeAreaView,
@@ -8,9 +8,23 @@ import {
   StatusBar,
   StyleSheet,
   TouchableOpacity,
+  ListItem
 } from "react-native";
 
+import api from './services/api';
+
 export default function App() {
+
+  const [repositories, setRepositories] = useState([]);
+
+  useEffect(()=>{
+    api.get('repositories').then(
+        response =>{
+            console.log(response.data);
+            setRepositories(response.data);   
+        });
+  },[]);
+
   async function handleLikeRepository(id) {
     // Implement "Like Repository" functionality
   }
@@ -40,7 +54,7 @@ export default function App() {
               3 curtidas
             </Text>
           </View>
-
+        
           <TouchableOpacity
             style={styles.button}
             onPress={() => handleLikeRepository(1)}
@@ -50,6 +64,15 @@ export default function App() {
             <Text style={styles.buttonText}>Curtir</Text>
           </TouchableOpacity>
         </View>
+     
+        <FlatList  
+          data={repositories}
+          keyExtractor={repository => repository.id}
+          renderItem={({item:repository}) => (
+            <Text>{repository.title}</Text>
+          )}>
+
+        </FlatList>
       </SafeAreaView>
     </>
   );
